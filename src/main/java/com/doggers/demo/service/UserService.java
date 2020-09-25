@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import com.doggers.demo.entity.Users;
 
 
+
 public interface UserService {
 
 	public Iterable<Users> findAll();
@@ -20,6 +21,9 @@ public interface UserService {
 	public Users save(Users user);
 	
 	public void deleteById(Long id);
+	
+	public Users findByUsername(String username);
+
 	
 	
 }
