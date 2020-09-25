@@ -1,20 +1,23 @@
 package com.doggers.demo.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class Users implements Serializable {
 
 	/**
 	 * 
@@ -24,21 +27,76 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(length = 50)
 	private String name;
+
+	@Column(length = 50)
 	private String lastname;
-	private String surname;
-	
+	private String username;
+
 	@Column(nullable = false, length = 50, unique = true)
 	private String email;
-	
+
+	@Column(name = "password", length = 60)
+	private String password;
+
 	private Boolean enabled;
+
+	@Column(name = "rol")
+	private byte rol;
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Role> roles;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public byte getRol() {
+		return rol;
+	}
+
+	public void setRol(byte rol) {
+		this.rol = rol;
+	}
+
 	@Column(name = "create_at")
 	private Date createAt;
-	
-	
+
+	public Date getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
+
+	@PrePersist
+	public void prePersist() {
+		createAt = new Date();
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -63,13 +121,6 @@ public class User implements Serializable {
 		this.lastname = lastname;
 	}
 
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
 
 	public String getEmail() {
 		return email;
@@ -87,7 +138,4 @@ public class User implements Serializable {
 		this.enabled = enabled;
 	}
 
-
-	
-	
 }

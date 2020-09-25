@@ -6,18 +6,18 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.doggers.demo.entity.User;
+import com.doggers.demo.entity.Users;
 
 
 public interface UserService {
 
-	public Iterable<User> findAll();
+	public Iterable<Users> findAll();
 	
-	public Page<User> findAll(Pageable pageable);
+	public Page<Users> findAll(Pageable pageable);
 	
-	public Optional<User> findById(Long id);
+	public Optional<Users> findById(Long id);
 	
-	public User save(User user);
+	public Users save(Users user);
 	
 	public void deleteById(Long id);
 	
