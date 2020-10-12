@@ -22,7 +22,7 @@ public interface UserService {
 	
 	public void deleteById(Long id);
 	
-	public Users findByUsername(String username);
+	public Users findByEmail(String email);
 
 	
 	

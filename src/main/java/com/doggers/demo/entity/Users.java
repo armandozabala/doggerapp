@@ -1,8 +1,7 @@
 package com.doggers.demo.entity;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import java.util.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,9 +10,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "users")
@@ -33,7 +34,9 @@ public class Users implements Serializable {
 
 	@Column(length = 50)
 	private String lastname;
-	private String username;
+	
+	@Column(length = 50)
+	private String phone;
 
 	@Column(nullable = false, length = 50, unique = true)
 	private String email;
@@ -42,59 +45,41 @@ public class Users implements Serializable {
 	private String password;
 
 	private Boolean enabled;
-
-	@Column(name = "rol")
-	private byte rol;
-
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Role> roles;
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
 	
-	public List<Role> getRoles() {
-		return roles;
-	}
+	private Long rol;
 
-	public void setRoles(List<Role> roles) {
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinTable(name="users_roles", joinColumns = @JoinColumn(name="users_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name="role_id",referencedColumnName = "id"))
+	private Collection<Role> roles;
+	
+	
+	public Users(String name, String lastname, String phone, String email, String password, Collection<Role> roles) {
+		super();
+		this.name = name;
+		this.lastname = lastname;
+		this.email = email;
+		this.phone = phone;
+		this.password = password;
 		this.roles = roles;
 	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public byte getRol() {
+	
+	
+	
+	public Long getRol() {
 		return rol;
 	}
 
-	public void setRol(byte rol) {
-		this.rol = rol;
+
+
+	public void setRol(Long long1) {
+		this.rol = long1;
 	}
 
-	@Column(name = "create_at")
-	private Date createAt;
 
-	public Date getCreateAt() {
-		return createAt;
-	}
 
-	public void setCreateAt(Date createAt) {
-		this.createAt = createAt;
-	}
-
-	@PrePersist
-	public void prePersist() {
-		createAt = new Date();
+	public Users() {
+		
 	}
 
 	public Long getId() {
@@ -121,6 +106,13 @@ public class Users implements Serializable {
 		this.lastname = lastname;
 	}
 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
 	public String getEmail() {
 		return email;
@@ -130,12 +122,28 @@ public class Users implements Serializable {
 		this.email = email;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public Boolean getEnabled() {
 		return enabled;
 	}
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public Collection<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Collection<Role> roles) {
+		this.roles = roles;
 	}
 
 }

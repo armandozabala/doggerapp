@@ -1,5 +1,6 @@
 package com.doggers.demo.service;
 
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import com.doggers.demo.entity.Users;
 import com.doggers.demo.repository.UserRepository;
 
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 	
+
 	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	
 	@Override
@@ -52,9 +55,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	@Transactional
-	public Users save(Users user) {
-		
-		return userRepository.save(user);
+	public Users save(Users reg) {
+
+		return userRepository.save(reg);
 		
 	}
 
@@ -68,9 +71,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		
-		Users user = userRepository.findByUsername(username);
+		Users user = userRepository.findByEmail(email);
 		
 		if(user == null) {
 				logger.error("Error");
@@ -79,16 +82,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		
 		List<GrantedAuthority> authorities = user.getRoles()
 				                                 .stream()
-				                                 .map(role -> new SimpleGrantedAuthority(role.getNombre()))
+				                                 .map(role -> new SimpleGrantedAuthority(role.getName()))
 				                                 .peek(authority -> logger.info("Role: "+ authority.getAuthority()))
 				                                 .collect(Collectors.toList());
 		
-		return new User(user.getUsername(), user.getPassword(), user.getEnabled(), true, true, true, authorities);
+		return new User(user.getEmail(), user.getPassword(), user.getEnabled(), true, true, true, authorities);
 	}
 
 	@Override
-	public Users findByUsername(String username) {
-		return userRepository.findByUsername(username);
+	public Users findByEmail(String email) {
+		return userRepository.findByEmail(email);
 	}
 
 }
