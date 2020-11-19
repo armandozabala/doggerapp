@@ -12,7 +12,6 @@ import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -55,6 +54,7 @@ public class UserController {
 	
 	//Read All Users
 	@GetMapping
+	
 	public List<Users> readAll(){
 		List<Users> users = StreamSupport.stream(userService.findAll().spliterator(), false)
 										.collect(Collectors.toList());
